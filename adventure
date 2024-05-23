@@ -1,1 +1,94 @@
+import time
+import random
+
+def print_pause(message):
+    
+    # Prints a message and pauses for 2 seconds before continuing.
+   
+    print(message)
+    time.sleep(2)
+
+def get_valid_choice(message, valid_options):
+
+    # Takes a message prompt and a list of valid options.
+    # Asks the player for input and keeps asking until a valid option is entered.
+    # Returns the valid choice.
+ 
+    choice = input(message)
+    while choice not in valid_options:
+        print("Invalid choice. Please try again.")
+        choice = input(message)
+    return choice
+
+def intro():
+   
+    # Displays the introduction to the game.
+
+    print_pause("This is an adventure game")
+    print_pause("Are you ready to play?")
+
+def choose_door():
+
+    # Allows the player to choose a door and determines the outcome.
+    # Returns the score.
+   
+    score = 0
+    doors = ["l", "r"]
+    choice = get_valid_choice("You are in a dark room and there are 2 doors in front of you. Choose right or left (r/l): ", doors)
+
+    if choice == "l":
+        if random.choice([True, False]):
+            print_pause("Oh no! You fell into a trap and can't get out!")
+            score -= 1
+        else:
+            choice = get_valid_choice("You chose the wrong door but you still have a chance to survive. Choose between doors (l/r): ", doors)
+            if choice == "l":
+                print_pause("You lost! Behind this door there was a lion.")
+                score -= 1
+            else:
+                print_pause("Congratulations champion! You are now free.")
+                score += 1
+
+    else:
+        print_pause("You chose the correct door.")
+        choice = get_valid_choice("Would you like to go to the another door that you found in this room? (y/n): ", ["y", "n"])
+
+        if choice == "y":
+            print_pause("You found a secret passage!")
+            if random.choice(doors) == "l":
+                print_pause("Oh no! There's a snake in here! You lost 1 point.")
+                score -= 1
+            else:
+                print_pause("Congratulations champion! You are now free.")
+                score += 1
+        else:
+            print_pause("Sorry, the fan dropped on your head and you died.")
+            score -= 1
+
+    return score
+
+def play_adventure_game():
+    
+    # Plays the adventure game.
+    
+    intro()
+    total_score = 0
+
+    while True:
+        choice = get_valid_choice("Would you like to play this adventure game? (y/n): ", ["y", "n"])
+
+        if choice == "n":
+            print_pause("Hard luck! See you next time!")
+            break
+
+        score = choose_door()
+        total_score += score
+
+        print_pause("Your current score: {}".format(total_score))
+
+        play_again = get_valid_choice("Would you like to play again? (y/n): ", ["y", "n"])
+        if play_again == "n":
+            break
+
+play_adventure_game()
 
